@@ -303,7 +303,7 @@
       event.preventDefault()
 
       console.info(this.order)
-      // orderStore.addOrder(this.order)
+      orderStore.addOrder(this.order)
       this.showConfirmation = true
 
     }

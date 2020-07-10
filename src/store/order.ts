@@ -23,7 +23,7 @@ export default class OrderModule extends VuexModule {
   async addOrder(newOrder: Order) {
     // const { data } = await axios.get('https://jsonplaceholder.typicode.com/todos')
     // return ({ todos: data })
-    return { current: Object.assign(this.current, newOrder) }
+    return { current: Object.assign({}, newOrder) }
   }
 
 

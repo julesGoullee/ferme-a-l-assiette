@@ -1,4 +1,5 @@
 module.exports = {
+  transpileDependencies: ['vuex-persist'],
   pwa: {
     // themeColor: "#664747",
     // msTileColor: "#130f40",
