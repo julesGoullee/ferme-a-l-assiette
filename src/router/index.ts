@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import '@/assets/main.scss'
 
 Vue.use(VueRouter)
 
@@ -19,6 +21,9 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
+
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 
 const router = new VueRouter({
   routes

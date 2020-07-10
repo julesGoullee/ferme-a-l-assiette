@@ -30,5 +30,10 @@ npm run test:e2e
 npm run lint
 ```
 
+### Generate assets 
+```
+vue-asset-generate -a ./public/img/logo.png -o public/img/icons
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
