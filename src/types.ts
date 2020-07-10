@@ -4,12 +4,6 @@ export interface Product {
   unitPrice: number;
 }
 
-export interface ProductValues {
-  text: any;
-  value: any;
-  disabled?: any;
-}
-
 export interface Order {
   email: string,
   name: string,

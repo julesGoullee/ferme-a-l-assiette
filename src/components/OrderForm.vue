@@ -120,15 +120,20 @@
         <b-container style="padding: 1px">
           <b-row>
             <b-col>
-              <b-form-group id="input-group-order-add-product-select" label="Sélectionner un produit" label-for="input-order-add-product-select">
-                <b-form-select
-                  id="input-order-add-product-select-product"
-                  v-model="orderAddProduct.name"
-                  :options="getProductsValues()"
-                  placeholder="Sélectionne un produit"
-                  size="sm"
-                ></b-form-select>
-              </b-form-group>
+              <b-dropdown
+                :text="this.orderAddProduct.name === '' ? 'Sélectionner un produit' : this.orderAddProduct.name"
+                block
+                class="m-2"
+                menu-class="w-100"
+                size="sm"
+              >
+              <b-dropdown-item
+                v-for="product in this.getProductsValues()"
+                :key="product.name"
+                @click="onSelectProduct(product)"
+                size="sm"
+              >{{ product.name }}</b-dropdown-item>
+              </b-dropdown>
             </b-col>
           </b-row>
           <b-row>
@@ -157,7 +162,7 @@
                   type="button"
                   variant="outline-info"
                   v-on:click="addProduct"
-                  :disabled="orderAddProduct.name === null || (orderAddProduct.quantity === null || orderAddProduct.quantity === '0' || orderAddProduct.quantity === '')"
+                  :disabled="orderAddProduct.name === '' || (orderAddProduct.quantity === null || orderAddProduct.quantity == 0)"
                   squared
                   size="sm"
                 >Ajouter</b-button>
@@ -245,15 +250,10 @@
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import {Order, Product, ProductValues} from '@/types';
+  import {Order, Product} from '@/types';
   import { orderStore, productsStore } from '@/store'
   import moment from 'moment';
   import 'moment/locale/fr';
-
-  interface OrderAddProduct {
-    name: any;
-    quantity: any;
-  }
 
   @Component
   export default class OrderForm extends Vue {
@@ -263,9 +263,10 @@
     deliveryMinDate = moment().toDate()
     deliveryMaxDate = moment().add(3, 'months').toDate()
 
-    orderAddProduct: OrderAddProduct = {
-      name: null,
-      quantity: null
+    orderAddProduct: Product = {
+      name: '',
+      quantity: 0,
+      unitPrice: 0
     }
 
     productsLoaded = productsStore.productsLoaded
@@ -284,19 +285,19 @@
 
     }
 
-    public getProductsValues(): ProductValues[] {
+    public getProductsValues(): Product[] {
 
-      return [{ value: null, text: 'Cliquer pour choisir un produit', disabled: true } as ProductValues]
-        .concat(productsStore.products.reduce( (acc: ProductValues[], product: Product) => {
+      return productsStore.products.reduce( (acc: Product[], product: Product) => {
 
           if(!this.order.products.find(productSelected => productSelected.name === product.name) ){
 
-            acc.push({ value: product.name, text: product.name })
+            acc.push(product)
 
           }
+
           return acc
 
-        }, []) as ProductValues[])
+        }, []) as Product[]
     }
 
     public onSubmit (event: any): void {
@@ -316,16 +317,24 @@
     public formatDelivery(deliveryDate: string): string {
       return moment(deliveryDate).format('dddd Do MMMM YYYY')
     }
+
+    public onSelectProduct(product: Product) {
+
+      this.orderAddProduct = product
+
+    }
+
     public addProduct (event: any): void {
 
       console.log(this.orderAddProduct);
       event.preventDefault()
       const product = productsStore.products.find( product => product.name === this.orderAddProduct.name)
       console.log(product);
-      this.order.products.push(Object.assign({}, product, { quantity: parseFloat(this.orderAddProduct.quantity) }) )
+      this.order.products.push(Object.assign({}, product, { quantity: this.orderAddProduct.quantity }) )
       this.orderAddProduct = {
-        name: null,
-        quantity: null
+        name: '',
+        quantity: 0,
+        unitPrice: 0
       }
 
     }
