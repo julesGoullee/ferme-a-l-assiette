@@ -1,7 +1,7 @@
 <template>
-  <b-container class="order align-content-center">
+  <b-container class="order">
     <b-row align-h="center">
-      <b-form @submit="onSubmit" >
+      <b-form @submit="onSubmit" style="padding: 0 10px">
         <b-form-group
           id="input-group-order-email"
           label="Email"
@@ -48,7 +48,7 @@
             size="sm"
           ></b-form-input>
         </b-form-group>
-        <b-container>
+        <b-container class="mb-2 mt-3">
           <b-row>
             <b-col cols="8" style="padding-left: 0">
               <b-form-group id="input-group-order-address-city" lable="Ville" label-for="input-order-address-city">
@@ -93,19 +93,23 @@
                     </b-col>
                   </b-row>
                   <b-row align-v="center">
-                    <b-col cols="8" style="padding: 0">
+                    <b-col cols="4" style="padding:0">
                       <b-form-input
                         id="input-order-edit-product-quantity"
                         v-model="product.quantity"
                         type="number"
-                        min="0"
-                        value="0"
+                        min="0.1"
                         step="any"
                         autocomplete="off"
                         size="sm"
                       ></b-form-input>
                     </b-col>
-                    <b-col cols="4">
+                    <b-col cols="6" class="" style="font-size: 12px;text-align: center;">
+                      <div v-if="product.quantity !== undefined && product.quantity !== 0 && product.quantity !== ''">
+                        x {{product.unitPrice.toFixed(2)}} = {{ (product.unitPrice * product.quantity).toFixed(2) }}
+                      </div>
+                    </b-col>
+                    <b-col cols="2">
                       <b-icon-x-circle
                         v-on:click="removeProduct(product)"
                         variant="danger"
@@ -117,9 +121,9 @@
             </b-list-group>
           </b-card>
         </b-form-group>
-        <b-container style="padding: 1px">
-          <b-row>
-            <b-col>
+        <b-container fluid class="mb-3 mt-3">
+          <b-row align-v="center">
+            <b-col cols="12" class="p-0">
               <b-dropdown
                 :text="this.orderAddProduct.id === '' ? 'Sélectionner un produit ' : `${this.orderAddProduct.name} `"
                 block
@@ -141,9 +145,9 @@
               </b-dropdown>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col cols="8">
-              <b-form-group id="input-group-order-add-product-quantity" label-for="input-order-add-product-quantity">
+          <b-row >
+            <b-col cols="4" class="p-0">
+              <b-form-group id="input-group-order-add-product-quantity" label-for="input-order-add-product-quantity" class="mb-0">
                 <b-form-input
                   id="input-order-select-product-quantity"
                   v-model="orderAddProduct.quantity"
@@ -157,19 +161,26 @@
                 ></b-form-input>
               </b-form-group>
             </b-col>
-            <b-col cols="4">
+            <b-col cols="5" class="p-0 mb-0" style="font-size: 12px; text-align: center;align-self: center;" >
+              <span v-if="orderAddProduct.id !== '' && orderAddProduct.quantity !== undefined && orderAddProduct.quantity !== 0 && orderAddProduct.quantity !== ''">
+                x {{orderAddProduct.unitPrice.toFixed(2)}} = {{ (orderAddProduct.unitPrice * orderAddProduct.quantity).toFixed(2) }}
+              </span>
+            </b-col>
+            <b-col cols="3" class="p-0">
               <b-form-group
                 id="input-group-add-product-button"
                 label-for="input-add-product-button"
+                class="mb-0"
               >
                 <b-button
                   id="input-add-product-button"
                   type="button"
                   variant="outline-info"
                   v-on:click="addProduct"
-                  :disabled="orderAddProduct.id === '' || (orderAddProduct.quantity === null || orderAddProduct.quantity === 0)"
+                  :disabled="orderAddProduct.id === '' || (orderAddProduct.quantity === undefined || orderAddProduct.quantity === 0)"
                   squared
                   size="sm"
+                  style="width: 100%;"
                 >Ajouter</b-button>
               </b-form-group>
             </b-col>
@@ -271,7 +282,7 @@
     orderAddProduct: Product = {
       id: '',
       name: '',
-      quantity: 0,
+      quantity: undefined,
       unitPrice: 0,
       unit: Unit.KG
     }
@@ -327,7 +338,7 @@
 
     public onSelectProduct(product: Product) {
 
-      this.orderAddProduct = product
+      this.orderAddProduct = Object.assign({}, product, { quantity: this.orderAddProduct.quantity })
 
     }
 
@@ -341,7 +352,7 @@
       this.orderAddProduct = {
         id: '',
         name: '',
-        quantity: 0,
+        quantity: undefined,
         unitPrice: 0,
         unit: Unit.KG
       }
@@ -373,6 +384,7 @@
   }
   .select-product-drop-down-menu {
     height: 500px!important;
+    width: 100%;
     overflow-y: scroll!important;
     overflow-x: hidden!important;
     li a {
