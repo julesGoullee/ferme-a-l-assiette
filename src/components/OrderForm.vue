@@ -5,6 +5,7 @@
         <b-form-group
           id="input-group-order-email"
           label="Email"
+          style="font-size: 13px"
           label-for="input-order-email"
         >
           <b-form-input
@@ -17,7 +18,11 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-group-order-name" label="Nom" label-for="input-order-name">
+        <b-form-group
+          id="input-group-order-name"
+          label="Nom" label-for="input-order-name"
+          style="font-size: 13px"
+        >
           <b-form-input
             id="input-order-name"
             v-model="order.name"
@@ -27,7 +32,12 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-group-order-phone" label="Téléphone" label-for="input-order-phone">
+        <b-form-group
+          id="input-group-order-phone"
+          label="Téléphone"
+          label-for="input-order-phone"
+          style="font-size: 13px"
+        >
           <b-form-input
             id="input-order-phone"
             v-model="order.phone"
@@ -38,7 +48,12 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-group-order-address-street" label="Adresse" label-for="input-order-address-street">
+        <b-form-group
+          id="input-group-order-address-street"
+          label="Adresse"
+          label-for="input-order-address-street"
+          style="font-size: 13px"
+        >
           <b-form-input
             id="input-order-address-street"
             v-model="order.address.street"
