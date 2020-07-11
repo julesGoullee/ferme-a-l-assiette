@@ -214,6 +214,7 @@
             variant="primary"
             size="sm"
             style="width: 100%;"
+            :disabled="!isValid()"
           >Valider</b-button>
         </b-form-group>
 
@@ -255,10 +256,11 @@
               striped
               :items="order.products"
               :fields="modalFields"
-              class="mt-3"
+              class="mt-3 confirm-products-table"
+              small
             >
               <template v-slot:table-caption>
-                <div style="text-align: center">Votre total est estimé a {{getTotal()}} €</div>
+                <div style="text-align: center">Votre total est estimé a {{order.total.toFixed(2)}} €</div>
               </template>
             </b-table>
           </b-row>
@@ -350,6 +352,19 @@
 
     }
 
+    public isValid(): boolean {
+
+      return this.order.products.length > 0 &&
+        this.order.deliveryDate !== '' &&
+        this.order.email !== '' &&
+        this.order.name !== '' &&
+        this.order.phone !== '' &&
+        this.order.address.city !== '' &&
+        this.order.address.street !== '' &&
+        this.order.address.postalCode !== '';
+
+    }
+
     public getProductsValues(): Product[] {
 
       return productsStore.products.reduce( (acc: Product[], product: Product) => {
@@ -366,9 +381,9 @@
     }
 
     public onSubmit (event: any): void {
-      event.preventDefault()
 
-      console.info(this.order)
+      event.preventDefault()
+      this.order.total = this.order.products.reduce( (acc: number, product: Product) => acc + ( (product.quantity || 1) * product.unitPrice), 0)
       orderStore.addOrder(this.order)
       this.showConfirmation = true
 
@@ -439,4 +454,15 @@
       padding: 0.25rem 1rem;
     }
   }
+  .confirm-products-table {
+    tr {
+      td:nth-child(2) {
+        white-space: nowrap;
+      }
+      td:nth-child(3) {
+        white-space: nowrap;
+      }
+    }
+  }
+
 </style>
