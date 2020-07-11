@@ -14,16 +14,18 @@ export interface Product {
   unit: Unit;
 }
 
+export interface Address {
+  street: string;
+  city: string;
+  postalCode: string;
+}
+
 export interface Order {
-  email: string,
-  name: string,
-  phone: string,
-  address: {
-    street: string,
-    city: string,
-    postalCode: string,
-  },
-  products: Product[],
-  total: number,
-  deliveryDate: string,
+  email: string;
+  name: string;
+  phone: string;
+  address: Address;
+  products: Product[];
+  total: number;
+  deliveryDate: string;
 }
