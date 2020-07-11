@@ -6,7 +6,6 @@
           id="input-group-order-email"
           label="Email"
           label-for="input-order-email"
-          description="Nous ne partagerons jamais votre e-mail avec quelqu'un d'autre."
         >
           <b-form-input
             id="input-order-email"
@@ -21,7 +20,7 @@
         <b-form-group id="input-group-order-name" label="Nom" label-for="input-order-name">
           <b-form-input
             id="input-order-name"
-            v-model="order.label"
+            v-model="order.name"
             required
             placeholder="Jean Dupond"
             size="sm"
@@ -77,7 +76,7 @@
 
         <b-form-group id="input-group-order-edit-product-select" label-for="input-order-edit-product-quantity">
           <b-card
-            header="Produits selectionnés:"
+            :header-html="`<div><span style='float:left'>Produits selectionnés</span><span style='float:right; font-weight: 500'>${getTotal()} €</span></div>`"
             v-if="order.products.length > 0"
             size="sm"
           >
@@ -135,13 +134,13 @@
                 menu-class="select-product-drop-down-menu"
                 boundary="#order-container"
               >
-              <b-dropdown-item
-                v-for="product in getProductsValues()"
-                :key="product.id"
-                @click="onSelectProduct(product)"
-                size="sm"
-                style="font-size: 12px;"
-              >{{ product.label }}</b-dropdown-item>
+                <b-dropdown-item
+                  v-for="product in getProductsValues()"
+                  :key="product.id"
+                  @click="onSelectProduct(product)"
+                  size="sm"
+                  style="font-size: 12px;"
+                >{{ product.label }}</b-dropdown-item>
               </b-dropdown>
             </b-col>
           </b-row>
@@ -203,7 +202,6 @@
           ></b-form-datepicker>
         </b-form-group>
 
-        total: {{getTotal()}}
         <b-form-group id="input-group-order-validate" label-for="input-order-validate">
           <b-button
             id="input-order-validate"
@@ -220,45 +218,68 @@
         size="xl"
         title="Confirmation de commande"
         v-model="showConfirmation"
+        scrollable
       >
-        <b-container >
+        <b-container style="font-size: 13px;">
           <b-row>
-            <b-col>Nom:</b-col>
-            <b-col>{{order.name}}</b-col>
+            <b-col cols="4" class="p-0" >Nom:</b-col>
+            <b-col cols="8">{{order.name}}</b-col>
           </b-row>
           <b-row>
-            <b-col>Email:</b-col>
-            <b-col>{{order.email}}</b-col>
+            <b-col cols="4" class="p-0">Email:</b-col>
+            <b-col cols="8">{{order.email}}</b-col>
           </b-row>
           <b-row>
-            <b-col>Rue:</b-col>
-            <b-col>{{order.address.street}}</b-col>
+            <b-col cols="4" class="p-0">Rue:</b-col>
+            <b-col cols="8">{{order.address.street}}</b-col>
           </b-row>
           <b-row>
-            <b-col>Ville:</b-col>
-            <b-col>{{order.address.city}}</b-col>
+            <b-col cols="4" class="p-0">Ville:</b-col>
+            <b-col cols="8">{{order.address.city}}</b-col>
           </b-row>
           <b-row>
-            <b-col>Code postal:</b-col>
-            <b-col>{{order.address.postalCode}}</b-col>
+            <b-col cols="4" class="p-0">Code postal:</b-col>
+            <b-col cols="8">{{order.address.postalCode}}</b-col>
           </b-row>
           <b-row>
-            <b-col>Date de livraison</b-col>
-            <b-col>{{formatDelivery(order.deliveryDate)}}</b-col>
+            <b-col cols="4" class="p-0">Date de livraison</b-col>
+            <b-col cols="8">{{formatDelivery(order.deliveryDate)}}</b-col>
           </b-row>
           <b-row>
-            <b-col>Produits:</b-col>
-            <b-col>
-              <b-list-group>
-                <b-list-group-item
-                  v-for="product of order.products"
-                  :key="product.id">
-                  {{product.name}} - {{product.quantity}}
-                </b-list-group-item>
-              </b-list-group>
-            </b-col>
+            <b-table
+              striped
+              :items="order.products"
+              :fields="modalFields"
+              class="mt-3"
+            >
+              <template v-slot:table-caption>
+                <div style="text-align: center">Votre total est estimé a {{getTotal()}} €</div>
+              </template>
+            </b-table>
           </b-row>
         </b-container>
+        <template v-slot:modal-footer="{ ok, cancel }">
+          <div class="w-100">
+            <b-button
+              variant="danger"
+              size="sm"
+              class="float-left w-40"
+              style="width: 40%"
+              @click="cancel()"
+            >
+              Modifier
+            </b-button>
+            <b-button
+              variant="primary"
+              size="sm"
+              class="float-right"
+              style="width: 40%"
+              @click="ok()"
+            >
+              Valider
+            </b-button>
+          </div>
+        </template>
       </b-modal>
     </b-row>
   </b-container>
@@ -289,6 +310,26 @@
     }
 
     productsLoaded = productsStore.productsLoaded
+    modalFields = [
+      {
+        key: 'name',
+        label: 'Produit'
+      },
+      {
+        key: 'quantity',
+        label: 'Quantité',
+        formatter: (value: any, key: any, item: Product) => {
+          return `${item.quantity} ${item.unit}`
+        }
+      },
+      {
+        key: 'unitPrice',
+        label: 'Prix',
+        formatter: (value: any, key: any, item: Product) => {
+          return `${value.toFixed(2)} €`
+        }
+      }
+    ]
 
     mounted(){
 
@@ -308,15 +349,15 @@
 
       return productsStore.products.reduce( (acc: Product[], product: Product) => {
 
-          if(!this.order.products.find(productSelected => productSelected.id === product.id) ){
+        if(!this.order.products.find(productSelected => productSelected.id === product.id) ){
 
-            acc.push(product)
+          acc.push(product)
 
-          }
+        }
 
-          return acc
+        return acc
 
-        }, []) as Product[]
+      }, []) as Product[]
     }
 
     public onSubmit (event: any): void {
