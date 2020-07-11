@@ -83,7 +83,7 @@
           >
             <b-list-group>
               <b-list-group-item
-                v-for="product in this.order.products"
+                v-for="product in order.products"
                 :key="product.id"
               >
                 <b-container>
@@ -125,7 +125,7 @@
           <b-row align-v="center">
             <b-col cols="12" class="p-0">
               <b-dropdown
-                :text="this.orderAddProduct.id === '' ? 'Sélectionner un produit ' : `${this.orderAddProduct.name} `"
+                :text="orderAddProduct.id === '' ? 'Sélectionner un produit ' : `${orderAddProduct.name} `"
                 block
                 no-flip
                 dropup
@@ -136,7 +136,7 @@
                 boundary="#order-container"
               >
               <b-dropdown-item
-                v-for="product in this.getProductsValues()"
+                v-for="product in getProductsValues()"
                 :key="product.id"
                 @click="onSelectProduct(product)"
                 size="sm"
