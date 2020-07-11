@@ -1,6 +1,8 @@
 import { Module, VuexModule, MutationAction } from 'vuex-module-decorators'
-import {Product} from '@/types'
+import axios from 'axios'
+import {Product, Unit} from '@/types'
 import store from '@/store'
+import Config from '@/config'
 
 @Module({ name: 'products', stateFactory: true, store })
 export default class ProductsModule extends VuexModule {
@@ -10,22 +12,19 @@ export default class ProductsModule extends VuexModule {
 
   @MutationAction({ mutate: ['products', 'productsLoaded']})
   async loadProduct() {
-    const productsLoaded: Product[] = [
-      {
-        name: 'Andouillette AAAAA (25.00€/kg)',
-        unitPrice: 25,
-      },
-      {
-        name: 'Blanc de Poulet (18.50€/kg)',
-        unitPrice: 18.5,
-      },
-      {
-        name: 'Boudin Noir (13.80€/kg)',
-        unitPrice: 25,
-      },
-    ]
+    const { data } = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=read&table=Produits`)
 
-    return { products: productsLoaded, productsLoaded: true }
+    const products = data.records.map( (record: any) => {
+
+      return {
+        id: record.Id,
+        name: record.Produit,
+        unitPrice: parseFloat(record.Prix),
+        unit: record['Unité'] as Unit
+      } as Product
+    })
+
+    return { products, productsLoaded: true }
 
   }
 

@@ -84,7 +84,7 @@
             <b-list-group>
               <b-list-group-item
                 v-for="product in this.order.products"
-                :key="product.name"
+                :key="product.id"
               >
                 <b-container>
                   <b-row>
@@ -121,17 +121,22 @@
           <b-row>
             <b-col>
               <b-dropdown
-                :text="this.orderAddProduct.name === '' ? 'Sélectionner un produit' : this.orderAddProduct.name"
+                :text="this.orderAddProduct.id === '' ? 'Sélectionner un produit ' : `${this.orderAddProduct.name} `"
                 block
-                class="m-2"
-                menu-class="w-100"
+                no-flip
+                dropup
+                lazy
+                class="mt-2 mb-2"
                 size="sm"
+                menu-class="select-product-drop-down-menu"
+                boundary="#order-container"
               >
               <b-dropdown-item
                 v-for="product in this.getProductsValues()"
-                :key="product.name"
+                :key="product.id"
                 @click="onSelectProduct(product)"
                 size="sm"
+                style="font-size: 12px;"
               >{{ product.name }}</b-dropdown-item>
               </b-dropdown>
             </b-col>
@@ -162,7 +167,7 @@
                   type="button"
                   variant="outline-info"
                   v-on:click="addProduct"
-                  :disabled="orderAddProduct.name === '' || (orderAddProduct.quantity === null || orderAddProduct.quantity == 0)"
+                  :disabled="orderAddProduct.id === '' || (orderAddProduct.quantity === null || orderAddProduct.quantity === 0)"
                   squared
                   size="sm"
                 >Ajouter</b-button>
@@ -236,7 +241,7 @@
               <b-list-group>
                 <b-list-group-item
                   v-for="product of order.products"
-                  :key="product.name">
+                  :key="product.id">
                   {{product.name}} - {{product.quantity}}
                 </b-list-group-item>
               </b-list-group>
@@ -249,9 +254,9 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
-  import {Order, Product} from '@/types';
-  import { orderStore, productsStore } from '@/store'
+  import {Component, Vue} from 'vue-property-decorator';
+  import {Order, Product, Unit} from '@/types';
+  import {orderStore, productsStore} from '@/store'
   import moment from 'moment';
   import 'moment/locale/fr';
 
@@ -264,9 +269,11 @@
     deliveryMaxDate = moment().add(3, 'months').toDate()
 
     orderAddProduct: Product = {
+      id: '',
       name: '',
       quantity: 0,
-      unitPrice: 0
+      unitPrice: 0,
+      unit: Unit.KG
     }
 
     productsLoaded = productsStore.productsLoaded
@@ -289,7 +296,7 @@
 
       return productsStore.products.reduce( (acc: Product[], product: Product) => {
 
-          if(!this.order.products.find(productSelected => productSelected.name === product.name) ){
+          if(!this.order.products.find(productSelected => productSelected.id === product.id) ){
 
             acc.push(product)
 
@@ -328,20 +335,22 @@
 
       console.log(this.orderAddProduct);
       event.preventDefault()
-      const product = productsStore.products.find( product => product.name === this.orderAddProduct.name)
+      const product = productsStore.products.find( product => product.id === this.orderAddProduct.id)
       console.log(product);
       this.order.products.push(Object.assign({}, product, { quantity: this.orderAddProduct.quantity }) )
       this.orderAddProduct = {
+        id: '',
         name: '',
         quantity: 0,
-        unitPrice: 0
+        unitPrice: 0,
+        unit: Unit.KG
       }
 
     }
 
     public removeProduct(removedProduct: Product): void {
 
-      this.order.products = this.order.products.filter(product => product.name !== removedProduct.name)
+      this.order.products = this.order.products.filter(product => product.id !== removedProduct.id)
 
     }
 
@@ -354,12 +363,20 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
   .order {
     width: 80%;
   }
   .card-header {
     padding: 0.35rem 0.7rem;
+  }
+  .select-product-drop-down-menu {
+    height: 500px!important;
+    overflow-y: scroll!important;
+    overflow-x: hidden!important;
+    li a {
+      padding: 0.25rem 1rem;
+    }
   }
 </style>

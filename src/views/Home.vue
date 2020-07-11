@@ -1,5 +1,5 @@
 <template>
-  <b-container class="home" fluid="sm">
+  <b-container class="home">
     <b-row align-h="center" class="mb-2">
       <b-col cols="12" class="text-center">
         <b-img-lazy
@@ -32,7 +32,7 @@
 
       </b-col>
     </b-row>
-    <b-row> <Order /> </b-row>
+    <b-row id="order-container" align-h="center"> <Order /> </b-row>
   </b-container>
 </template>
 

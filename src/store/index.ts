@@ -8,10 +8,13 @@ import VuexPersistence from 'vuex-persist'
 Vue.use(Vuex)
 const initializer = (store: Store<any>) => initialiseStores(store)
 
-const vuexLocal = new VuexPersistence({
-  storage: window.localStorage
-})
-export const plugins = [initializer, vuexLocal.plugin]
+// const vuexLocal = new VuexPersistence({
+//   storage: window.localStorage
+// })
+export const plugins = [
+  initializer,
+  // vuexLocal.plugin
+]
 
 const store = new Vuex.Store({
   state: {},
