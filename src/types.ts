@@ -9,6 +9,7 @@ export enum Unit {
 export interface Product {
   id: string;
   name: string;
+  label: string;
   quantity?: number;
   unitPrice: number;
   unit: Unit;

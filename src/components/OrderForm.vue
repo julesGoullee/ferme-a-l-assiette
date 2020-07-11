@@ -21,7 +21,7 @@
         <b-form-group id="input-group-order-name" label="Nom" label-for="input-order-name">
           <b-form-input
             id="input-order-name"
-            v-model="order.name"
+            v-model="order.label"
             required
             placeholder="Jean Dupond"
             size="sm"
@@ -93,7 +93,7 @@
                     </b-col>
                   </b-row>
                   <b-row align-v="center">
-                    <b-col cols="4" style="padding:0">
+                    <b-col cols="3" style="padding:0">
                       <b-form-input
                         id="input-order-edit-product-quantity"
                         v-model="product.quantity"
@@ -104,9 +104,9 @@
                         size="sm"
                       ></b-form-input>
                     </b-col>
-                    <b-col cols="6" class="" style="font-size: 12px;text-align: center;">
+                    <b-col cols="7" class="" style="font-size: 12px;text-align: center; padding:0">
                       <div v-if="product.quantity !== undefined && product.quantity !== 0 && product.quantity !== ''">
-                        x {{product.unitPrice.toFixed(2)}} = {{ (product.unitPrice * product.quantity).toFixed(2) }}
+                        {{product.unit}} x {{product.unitPrice.toFixed(2)}}€ = {{ (product.unitPrice * product.quantity).toFixed(2) }}€
                       </div>
                     </b-col>
                     <b-col cols="2">
@@ -141,12 +141,12 @@
                 @click="onSelectProduct(product)"
                 size="sm"
                 style="font-size: 12px;"
-              >{{ product.name }}</b-dropdown-item>
+              >{{ product.label }}</b-dropdown-item>
               </b-dropdown>
             </b-col>
           </b-row>
           <b-row >
-            <b-col cols="4" class="p-0">
+            <b-col cols="3" class="p-0">
               <b-form-group id="input-group-order-add-product-quantity" label-for="input-order-add-product-quantity" class="mb-0">
                 <b-form-input
                   id="input-order-select-product-quantity"
@@ -161,9 +161,9 @@
                 ></b-form-input>
               </b-form-group>
             </b-col>
-            <b-col cols="5" class="p-0 mb-0" style="font-size: 12px; text-align: center;align-self: center;" >
+            <b-col cols="6" class="p-0 mb-0" style="font-size: 12px; text-align: center;align-self: center;" >
               <span v-if="orderAddProduct.id !== '' && orderAddProduct.quantity !== undefined && orderAddProduct.quantity !== 0 && orderAddProduct.quantity !== ''">
-                x {{orderAddProduct.unitPrice.toFixed(2)}} = {{ (orderAddProduct.unitPrice * orderAddProduct.quantity).toFixed(2) }}
+                {{orderAddProduct.unit}} x {{orderAddProduct.unitPrice.toFixed(2)}}€ = {{ (orderAddProduct.unitPrice * orderAddProduct.quantity).toFixed(2) }}€
               </span>
             </b-col>
             <b-col cols="3" class="p-0">
@@ -282,6 +282,7 @@
     orderAddProduct: Product = {
       id: '',
       name: '',
+      label: '',
       quantity: undefined,
       unitPrice: 0,
       unit: Unit.KG
@@ -352,6 +353,7 @@
       this.orderAddProduct = {
         id: '',
         name: '',
+        label: '',
         quantity: undefined,
         unitPrice: 0,
         unit: Unit.KG
