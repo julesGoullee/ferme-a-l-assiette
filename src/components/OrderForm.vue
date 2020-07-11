@@ -1,7 +1,7 @@
 <template>
-  <b-container class="order">
+  <b-container fluid class="order">
     <b-row align-h="center">
-      <b-form @submit="onSubmit" style="padding: 0 10px">
+      <b-form @submit="onSubmit" style="padding: 0 10px; width: 100%">
         <b-form-group
           id="input-group-order-email"
           label="Email"
@@ -47,7 +47,7 @@
             size="sm"
           ></b-form-input>
         </b-form-group>
-        <b-container class="mb-2 mt-3">
+        <b-container fluid class="mb-2 mt-3">
           <b-row>
             <b-col cols="8" style="padding-left: 0">
               <b-form-group id="input-group-order-address-city" lable="Ville" label-for="input-order-address-city">
@@ -85,7 +85,7 @@
                 v-for="product in order.products"
                 :key="product.id"
               >
-                <b-container>
+                <b-container fluid>
                   <b-row>
                     <b-col style="font-size: 13px;padding: 0" class="mb-1 mt-0">
                       {{product.name}}
@@ -98,12 +98,13 @@
                         v-model="product.quantity"
                         type="number"
                         min="0.1"
+                        :number=true
                         step="any"
                         autocomplete="off"
                         size="sm"
                       ></b-form-input>
                     </b-col>
-                    <b-col cols="7" class="" style="font-size: 12px;text-align: center; padding:0">
+                    <b-col cols="7" class="" style="font-size: 12px; text-align: center; padding:0">
                       <div v-if="product.quantity !== undefined && product.quantity !== 0 && product.quantity !== ''">
                         {{product.unit}} x {{product.unitPrice.toFixed(2)}}€ = {{ (product.unitPrice * product.quantity).toFixed(2) }}€
                       </div>
@@ -121,69 +122,73 @@
           </b-card>
         </b-form-group>
         <b-container fluid class="mb-3 mt-3">
-          <b-row align-v="center">
-            <b-col cols="12" class="p-0">
-              <b-dropdown
-                :text="orderAddProduct.id === '' ? 'Sélectionner un produit ' : `${orderAddProduct.name} `"
-                block
-                no-flip
-                dropup
-                lazy
-                class="mt-2 mb-2"
-                size="sm"
-                menu-class="select-product-drop-down-menu"
-                boundary="#order-container"
-              >
-                <b-dropdown-item
-                  v-for="product in getProductsValues()"
-                  :key="product.id"
-                  @click="onSelectProduct(product)"
+          <b-form>
+            <b-row align-v="center">
+              <b-col cols="12" class="p-0">
+                <b-dropdown
+                  :text="orderAddProduct.id === '' ? 'Sélectionner un produit ' : `${orderAddProduct.name} `"
+                  block
+                  no-flip
+                  dropup
+                  lazy
+                  class="mt-2 mb-2"
                   size="sm"
-                  style="font-size: 12px;"
-                >{{ product.label }}</b-dropdown-item>
-              </b-dropdown>
-            </b-col>
-          </b-row>
-          <b-row >
-            <b-col cols="3" class="p-0">
-              <b-form-group id="input-group-order-add-product-quantity" label-for="input-order-add-product-quantity" class="mb-0">
-                <b-form-input
-                  id="input-order-select-product-quantity"
-                  v-model="orderAddProduct.quantity"
-                  type="number"
-                  min="0"
-                  value="0"
-                  step="any"
-                  placeholder="1.2"
-                  autocomplete="off"
-                  size="sm"
-                ></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col cols="6" class="p-0 mb-0" style="font-size: 12px; text-align: center;align-self: center;" >
-              <span v-if="orderAddProduct.id !== '' && orderAddProduct.quantity !== undefined && orderAddProduct.quantity !== 0 && orderAddProduct.quantity !== ''">
-                {{orderAddProduct.unit}} x {{orderAddProduct.unitPrice.toFixed(2)}}€ = {{ (orderAddProduct.unitPrice * orderAddProduct.quantity).toFixed(2) }}€
-              </span>
-            </b-col>
-            <b-col cols="3" class="p-0">
-              <b-form-group
-                id="input-group-add-product-button"
-                label-for="input-add-product-button"
-                class="mb-0"
-              >
-                <b-button
-                  id="input-add-product-button"
-                  type="button"
-                  variant="outline-info"
-                  v-on:click="addProduct"
-                  :disabled="orderAddProduct.id === '' || (orderAddProduct.quantity === undefined || orderAddProduct.quantity === 0)"
-                  squared
-                  size="sm"
-                  style="width: 100%;"
-                >Ajouter</b-button>
-              </b-form-group>
-            </b-col>
-          </b-row>
+                  menu-class="select-product-drop-down-menu"
+                  boundary="#order-container"
+                >
+                  <b-dropdown-item
+                    v-for="product in getProductsValues()"
+                    :key="product.id"
+                    @click="onSelectProduct(product)"
+                    size="sm"
+                    style="font-size: 12px;"
+                  >{{ product.label }}</b-dropdown-item>
+                </b-dropdown>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col cols="3" class="p-0">
+                <b-form-group id="input-group-order-add-product-quantity" label-for="input-order-add-product-quantity" class="mb-0">
+                  <b-form-input
+                    id="input-order-select-product-quantity"
+                    v-model="orderAddProduct.quantity"
+                    type="number"
+                    min="0"
+                    max="1000"
+                    value="0"
+                    :number=true
+                    step="any"
+                    placeholder="1.2"
+                    autocomplete="off"
+                    size="sm"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col cols="6" class="p-0 mb-0" style="font-size: 12px; text-align: center;align-self: center;">
+                <div v-if="orderAddProduct.id !== '' && orderAddProduct.quantity && parseFloat(orderAddProduct.quantity.toString() ) > 0">
+                  {{orderAddProduct.unit}} x {{orderAddProduct.unitPrice.toFixed(2)}}€ = {{ (orderAddProduct.unitPrice * orderAddProduct.quantity).toFixed(2) }}€
+                </div>
+              </b-col>
+              <b-col cols="3" class="p-0">
+                <b-form-group
+                  id="input-group-add-product-button"
+                  label-for="input-add-product-button"
+                  class="mb-0"
+                >
+                  <b-button
+                    id="input-add-product-button"
+                    type="submit"
+                    variant="outline-info"
+                    v-on:click="addProduct"
+                    :disabled="orderAddProduct.id === '' || (!orderAddProduct.quantity || parseFloat(orderAddProduct.quantity) <= 0)"
+                    squared
+                    size="sm"
+                    style="width: 100%;"
+                  >Ajouter</b-button>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form>
         </b-container>
 
         <b-form-group id="input-group-order-delivery-date" label-for="input-order-delivery-date">
@@ -386,11 +391,11 @@
 
     public addProduct (event: any): void {
 
-      console.log(this.orderAddProduct);
       event.preventDefault()
       const product = productsStore.products.find( product => product.id === this.orderAddProduct.id)
-      console.log(product);
-      this.order.products.push(Object.assign({}, product, { quantity: this.orderAddProduct.quantity }) )
+      const quantity = this.orderAddProduct.quantity ? parseFloat(this.orderAddProduct.quantity.toString() ) : 0;
+
+      this.order.products.push(Object.assign({}, product, { quantity }) )
       this.orderAddProduct = {
         id: '',
         name: '',

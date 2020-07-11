@@ -6,7 +6,7 @@
 <!--        <router-link to="/about">About</router-link>-->
 <!--      </b-col>-->
 <!--    </b-row>-->
-    <b-row> <router-view/> </b-row>
+    <b-row class="p-0"> <router-view/> </b-row>
   </b-container>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <b-container class="home">
+  <b-container fluid class="home">
     <b-row align-h="center" class="mb-2">
       <b-col cols="12" class="text-center">
         <b-img-lazy
@@ -32,7 +32,7 @@
 
       </b-col>
     </b-row>
-    <b-row id="order-container" align-h="center"> <Order /> </b-row>
+    <b-row id="order-container" align-h="center" style="max-width: 700px; margin: auto"> <Order /> </b-row>
   </b-container>
 </template>
 
@@ -49,6 +49,6 @@
 <style lang="scss">
   .intro {
     font-size: 13px;
-    padding: 0 25px!important;
+    /*padding: 0 25px!important;*/
   }
 </style>
