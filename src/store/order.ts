@@ -27,7 +27,7 @@ export default class OrderModule extends VuexModule {
 
     const orderFormatted = Object.assign({}, newOrder) as Record<string, any>
     orderFormatted.products = orderFormatted.products.reduce( (acc: string, product: Product) =>
-      `${acc}${product.group} - ${product.name}:${product.quantity};`, '')
+      `${acc}${product.group ? `${product.group} - ` : ''}${product.name}:${product.quantity};`, '')
     const res = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=addOrder&data=${JSON.stringify(orderFormatted)}`)
     console.log(res)
     return { current: Object.assign({}, newOrder) }
