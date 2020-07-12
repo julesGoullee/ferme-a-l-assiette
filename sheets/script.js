@@ -1,31 +1,74 @@
-var SHEET_ID = "1JUmwo8nhqq7irBXXSkFgmxeeFq4DkcaH-Bc5AVhjJtA";
+const config = {
+  SHEET_ID: "1JUmwo8nhqq7irBXXSkFgmxeeFq4DkcaH-Bc5AVhjJtA",
+  TABLE: {
+    PRODUCTS: 'Produits',
+    ORDERS: 'Commandes'
+  }
+};
 
 /*
  * GET Requests
  */
-function doGet( req ) {
-  var action    = req.parameter.action;
-  var table_req = req.parameter.table;
+function doGet(req){
 
-  var db    = SpreadsheetApp.openById( SHEET_ID );
-  var table = db.getSheetByName( table_req );
+  const action = req.parameter.action;
+  // const tableReq = req.parameter.table;
+
+  // const db = SpreadsheetApp.openById(config.SHEET_ID);
+  // const table = db.getSheetByName(tableReq);
 
   switch(action) {
-    case "read":
-      return Read( req, table );
+    // case "read":
+    //   return Read(req, table);
+    //   break;
+    // case "insert":
+    //   return Insert(req, table);
+    //   break;
+    // case "update":
+    //   return Update(req, table);
+    //   break;
+    // case "delete":
+    //   return Delete(req, table);
+    //   break;
+    case "getProducts":
+      return GetProduct(req);
       break;
-    case "insert":
-      return Insert( req, table );
-      break;
-    case "update":
-      return Update( req, table );
-      break;
-    case "delete":
-      return Delete( req, table );
+    case "addOrder":
+      return AddOrder(req);
       break;
     default:
       break;
   }
+}
+
+function GetProduct(request){
+
+  const db = SpreadsheetApp.openById(config.SHEET_ID);
+  const table = db.getSheetByName(config.TABLE.PRODUCTS);
+  return Read(request, table);
+
+}
+
+function AddOrder(request){
+
+  const db = SpreadsheetApp.openById(config.SHEET_ID);
+  const table = db.getSheetByName(config.TABLE.ORDERS);
+  const rawData = JSON.parse(request.parameter.data);
+  const data = {
+    Id: Utilities.getUuid(),
+    'Date de commande': (new Date() ).toISOString().split('T')[0],
+    'Date de livraison': rawData.deliveryDate,
+    Nom: rawData.name,
+    'E-mail': rawData.email,
+    Telephone: rawData.phone,
+    Rue: rawData.address.street,
+    Ville: rawData.address.city,
+    'Code postal': rawData.address.postalCode,
+    Produits: rawData.products
+  };
+
+  return Insert(data, table);
+
 }
 
 /* Read
@@ -48,6 +91,27 @@ function Read( request, table ) {
 
 }
 
+function InsertTest( ) {
+
+  const db = SpreadsheetApp.openById(config.SHEET_ID);
+  const table = db.getSheetByName(config.TABLE.ORDERS);
+  const data = {
+    Id: Utilities.getUuid(),
+    'Date de commande': '1',
+    'Date de livraison': 'deliveryDate',
+    Nom: 'name',
+    'E-mail': 'email',
+    Telephone: 'phone',
+    Rue: 'street',
+    Ville: 'city',
+    'Code postal': 'postalCode',
+    'Produits': 'p1,p2'
+  };
+
+  return Insert(data, table);
+
+}
+
 /* Insert
  * dynamic for all data
  *
@@ -57,13 +121,12 @@ function Read( request, table ) {
  *
  * @example-request | ?action=insert&table=<TABLE_NAME>&data={"name":"John Doe"}
  */
-function Insert( request, table ) {
+function Insert( data, table ) {
   var errors = [];
 
   var last_col     = table.getLastColumn();
   var first_row    = table.getRange(1, 1, 1, last_col).getValues();
   var headers      = first_row.shift();
-  var data         = JSON.parse( request.parameter.data );
   var new_row;
   var result = {};
 
@@ -213,4 +276,20 @@ function prepareRow( object_to_sort, array_with_order ) {
   }
 
   return sorted_array;
+}
+
+function sendMail(template, email) {
+
+  var templ = HtmlService
+    .createTemplateFromFile('mail-client');
+
+  var email = 'jules@amon.tech';
+
+  var message = templ.evaluate().getContent();
+
+  MailApp.sendEmail({
+    to: email,
+    subject: "Test",
+    htmlBody: message
+  });
 }

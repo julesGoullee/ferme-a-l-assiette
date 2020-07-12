@@ -103,7 +103,7 @@
                 <b-container fluid>
                   <b-row>
                     <b-col style="font-size: 13px;padding: 0" class="mb-1 mt-0">
-                      {{product.name}}
+                      {{product.group}} - {{product.name}}
                     </b-col>
                   </b-row>
                   <b-row align-v="center">
@@ -151,6 +151,16 @@
                   menu-class="select-product-drop-down-menu"
                   boundary="#order-container"
                 >
+                  <b-dropdown-group v-for="productGroup in getProductGroups()" :header="productGroup" :key="productGroup">
+                    <b-dropdown-item
+                      v-for="product in getProductsValues(productGroup)"
+                      :key="product.id"
+                      @click="onSelectProduct(product)"
+                      size="sm"
+                      style="font-size: 12px;"
+                    >{{ product.label }}</b-dropdown-item>
+                  </b-dropdown-group>
+                  <b-dropdown-divider></b-dropdown-divider>
                   <b-dropdown-item
                     v-for="product in getProductsValues()"
                     :key="product.id"
@@ -332,10 +342,14 @@
     }
 
     productsLoaded = productsStore.productsLoaded
+
     modalFields = [
       {
         key: 'name',
-        label: 'Produit'
+        label: 'Produit',
+        formatter: (value: any, key: any, item: Product) => {
+          return `${item.group} - ${item.name}`
+        }
       },
       {
         key: 'quantity',
@@ -380,11 +394,18 @@
 
     }
 
-    public getProductsValues(): Product[] {
+    public getProductGroups() {
+
+      return productsStore.productGroups
+
+    }
+
+    public getProductsValues(group?: string) {
 
       return productsStore.products.reduce( (acc: Product[], product: Product) => {
 
-        if(!this.order.products.find(productSelected => productSelected.id === product.id) ){
+        if( (group === product.group || !group && product.group === '') &&
+          !this.order.products.find(productSelected => productSelected.id === product.id) ){
 
           acc.push(product)
 

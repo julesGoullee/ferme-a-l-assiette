@@ -8,24 +8,35 @@ import Config from '@/config'
 export default class ProductsModule extends VuexModule {
 
   products: Product[] = []
+  productGroups: string[] = []
   productsLoaded = false
 
-  @MutationAction({ mutate: ['products', 'productsLoaded']})
+  @MutationAction({ mutate: ['products', 'productGroups', 'productsLoaded']})
   async loadProduct() {
 
-    const res = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=read&table=Produits`)
+    const res = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=getProducts`)
+
+    const groups = new Set();
+
     const products = res.data.data.map( (record: any) => {
+
+      if(record.Groupe){
+
+        groups.add(record.Groupe);
+
+      }
 
       return {
         id: record.Id,
-        name: record.Produit,
-        label: record['Libellé'],
+        name: record.Nom,
+        group: record.Groupe,
+        label: `${record.Nom} (${parseFloat(record.Prix).toFixed(2)}€/${record['Unité']})`,
         unitPrice: parseFloat(record.Prix),
         unit: record['Unité'] as Unit
       } as Product
     })
 
-    return { products, productsLoaded: true }
+    return { products, productGroups: Array.from(groups), productsLoaded: true }
 
   }
 

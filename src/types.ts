@@ -2,14 +2,13 @@ export enum Unit {
   KG = 'kg',
   PIECE = 'piece',
   TRANCHE = 'tranche',
-  DOUZAINE = 'douzaine',
-  DEMI_DOUZAINE = '½ douzaine'
 }
 
 export interface Product {
   id: string;
   name: string;
   label: string;
+  group?: string;
   quantity?: number;
   unitPrice: number;
   unit: Unit;
@@ -22,6 +21,7 @@ export interface Address {
 }
 
 export interface Order {
+  id: string;
   email: string;
   name: string;
   phone: string;
