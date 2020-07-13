@@ -151,23 +151,26 @@
                   menu-class="select-product-drop-down-menu"
                   boundary="#order-container"
                 >
-                  <b-dropdown-group v-for="productGroup in getProductGroups()" :header="productGroup" :key="productGroup">
+                  <b-overlay :show="!productLoaded()" rounded="sm" style="height: 100%">
+
+                    <b-dropdown-group v-for="productGroup in getProductGroups()" :header="productGroup" :key="productGroup">
+                      <b-dropdown-item
+                        v-for="product in getProductsValues(productGroup)"
+                        :key="product.id"
+                        @click="onSelectProduct(product)"
+                        size="sm"
+                        style="font-size: 12px;"
+                      >{{ product.label }}</b-dropdown-item>
+                    </b-dropdown-group>
+                    <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item
-                      v-for="product in getProductsValues(productGroup)"
+                      v-for="product in getProductsValues()"
                       :key="product.id"
                       @click="onSelectProduct(product)"
                       size="sm"
                       style="font-size: 12px;"
                     >{{ product.label }}</b-dropdown-item>
-                  </b-dropdown-group>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item
-                    v-for="product in getProductsValues()"
-                    :key="product.id"
-                    @click="onSelectProduct(product)"
-                    size="sm"
-                    style="font-size: 12px;"
-                  >{{ product.label }}</b-dropdown-item>
+                  </b-overlay>
                 </b-dropdown>
               </b-col>
             </b-row>
@@ -239,6 +242,7 @@
             variant="primary"
             size="sm"
             style="width: 100%;"
+            class="btn-disable-on-focus"
             :disabled="!isValid()"
           >Valider</b-button>
         </b-form-group>
@@ -251,6 +255,9 @@
         v-model="showConfirmation"
         scrollable
         @ok="confirmOrder"
+        no-close-on-backdrop
+        no-close-on-esc
+        hide-header-close
       >
         <b-container style="font-size: 13px;">
           <b-row>
@@ -292,26 +299,29 @@
           </b-row>
         </b-container>
         <template v-slot:modal-footer="{ ok, cancel }">
-          <div class="w-100">
-            <b-button
-              variant="danger"
-              size="sm"
-              class="float-left w-40"
-              style="width: 40%"
-              @click="cancel()"
-            >
-              Modifier
-            </b-button>
-            <b-button
-              variant="primary"
-              size="sm"
-              class="float-right"
-              style="width: 40%"
-              @click="ok()"
-            >
-              Valider
-            </b-button>
-          </div>
+          <b-overlay :show="showConfirmationLoader" rounded="sm" class="w-100">
+            <div class="w-100">
+              <b-button
+                variant="danger"
+                size="sm"
+                class="float-left w-40 btn-disable-on-focus"
+                style="width: 40%"
+                @click="cancel()"
+              >
+                Modifier
+              </b-button>
+              <b-button
+                variant="primary"
+                size="sm"
+                class="float-right btn-disable-on-focus"
+                style="width: 40%"
+                @click="ok()"
+              >
+                Valider
+              </b-button>
+            </div>
+          </b-overlay>
+
         </template>
       </b-modal>
     </b-row>
@@ -330,6 +340,7 @@
 
     order: Order = orderStore.current
     showConfirmation = false
+    showConfirmationLoader = false
     deliveryMinDate = moment().toDate()
     deliveryMaxDate = moment().add(3, 'months').toDate()
 
@@ -341,8 +352,6 @@
       unitPrice: 0,
       unit: Unit.KG
     }
-
-    productsLoaded = productsStore.productsLoaded
 
     modalFields = [
       {
@@ -372,13 +381,19 @@
 
       this.$nextTick(function () {
 
-        if(!this.productsLoaded){
+        if(!productsStore.productsLoaded){
 
           productsStore.loadProduct()
 
         }
 
       })
+
+    }
+
+    public productLoaded(): boolean {
+
+      return productsStore.productsLoaded;
 
     }
 
@@ -428,9 +443,13 @@
     public confirmOrder(event: any): void {
 
       event.preventDefault()
-      this.showConfirmation = false
+      this.showConfirmationLoader = true
+
       orderStore.addOrder(this.order).then( () => {
+
+        this.showConfirmationLoader = false
         this.$router.push('/commandeTermine')
+
       })
 
     }
@@ -509,6 +528,12 @@
         white-space: nowrap;
       }
     }
+  }
+
+  .btn-disable-on-focus:focus {
+    outline: none!important;
+    outline-width: 0!important;
+    box-shadow: none!important;
   }
 
 </style>
