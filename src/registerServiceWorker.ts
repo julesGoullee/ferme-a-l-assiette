@@ -10,7 +10,14 @@ if (process.env.NODE_ENV === 'production') {
         'For more details, visit https://goo.gl/AFskqB'
       )
     },
-    registered () {
+    registered (registration) {
+
+      setInterval(() => {
+
+        registration.update();
+
+      }, 1000 * 60 * 60);
+
       console.log('Service worker has been registered.')
     },
     cached () {
@@ -19,7 +26,12 @@ if (process.env.NODE_ENV === 'production') {
     updatefound () {
       console.log('New content is downloading.')
     },
-    updated () {
+    updated (registration) {
+
+      document.dispatchEvent(
+        new CustomEvent('swUpdated', { detail: registration })
+      );
+
       console.log('New content is available; please refresh.')
     },
     offline () {

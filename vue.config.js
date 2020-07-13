@@ -4,6 +4,15 @@ module.exports = {
     themeColor: "#ece5dc",
     msTileColor: "#ece5dc",
     name: "Ferme à l'assiette",
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: 'src/sw.js',
+      swDest: './src/service-worker.js',
+    },
+
     manifestOptions: {
       "icons": [
         {

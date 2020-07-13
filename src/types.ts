@@ -14,6 +14,8 @@ declare global {
 
   interface Window {
     instgrm: any;
+    __precacheManifest: any;
+    skipWaiting: any;
   }
 
 }

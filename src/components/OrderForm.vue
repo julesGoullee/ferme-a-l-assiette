@@ -468,7 +468,7 @@
 
           })
 
-        } else {
+        } else if(this.$router.currentRoute.path !== '/nouvelleCommande'){
 
           this.$router.replace('/nouvelleCommande')
 
