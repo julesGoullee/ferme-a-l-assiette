@@ -468,6 +468,10 @@
 
           })
 
+        } else {
+
+          this.$router.replace('/nouvelleCommande')
+
         }
 
       })
@@ -492,7 +496,7 @@
         orderStore.updateOrder(this.order).then( () => {
 
           this.showConfirmationLoader = false
-          this.$router.push('/commandeTermine')
+          this.$router.replace('/commandeTermine')
 
         })
 
@@ -501,7 +505,7 @@
         orderStore.addOrder(this.order).then( () => {
 
           this.showConfirmationLoader = false
-          this.$router.push('/commandeTermine')
+          this.$router.replace('/commandeTermine')
 
         })
 

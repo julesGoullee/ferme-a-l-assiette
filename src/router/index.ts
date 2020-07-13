@@ -9,8 +9,8 @@ Vue.use(VueRouter)
 
   const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    name: 'Home',
+    path: '/nouvelleCommande',
+    name: 'NewOrder',
     component: Home
   },
   {
@@ -37,7 +37,8 @@ const router = new VueRouter({
   routes,
   scrollBehavior(){
     return { x: 0, y: 0 }
-  }
+  },
+  mode: 'history'
 })
 
 export default router

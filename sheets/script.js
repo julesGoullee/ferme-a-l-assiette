@@ -104,7 +104,7 @@ function AddOrder(request){
       `${acc}${product.group ? `${product.group} - ` : ''}${product.name}:${product.quantity};`, '')
   };
 
-  sendEmailNewOrderUser(rawOrder);
+  sendEmailOrderUser(rawOrder, true);
 
   return Insert(order, table);
 
@@ -129,7 +129,7 @@ function UpdateOrder(request){
       `${acc}${product.group ? `${product.group} - ` : ''}${product.name}:${product.quantity};`, '')
   };
 
-  sendEmailNewOrderUser(rawOrder);
+  sendEmailOrderUser(rawOrder);
 
   return Update(rawOrder.id, order, table);
 
@@ -156,11 +156,11 @@ function testSendEmail(){
     "deliveryDate":"2020-07-24"
   };
 
-  return sendEmailNewOrderUser(order);
+  return sendEmailOrderUser(order);
 
 }
 
-function sendEmailNewOrderUser(order){
+function sendEmailOrderUser(order, isNew){
 
   const mailNewOrderUserTemplate = HtmlService
     .createTemplateFromFile('mail-new-order-user').evaluate().getContent();
@@ -179,8 +179,7 @@ function sendEmailNewOrderUser(order){
 
   return MailApp.sendEmail({
     to: order.email,
-    from: `Ferme a l'assiette`,
-    subject: "Confirmation de commande",
+    subject: isNew ? "Confirmation de commande" : 'Mise a jour de commande',
     htmlBody: mailNewOrderUser
   });
 
