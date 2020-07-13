@@ -38,7 +38,11 @@
 
       this.$nextTick(function () {
 
-        window.instgrm.Embeds.process();
+        if(window.instgrm && window.instgrm.Embeds){
+
+          window.instgrm.Embeds.process();
+
+        }
 
       })
 
