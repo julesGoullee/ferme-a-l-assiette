@@ -11,7 +11,7 @@
     </b-row>
     <b-row align-h="center">
       <b-col class="intro mt-2 mb-4 text-justify">
-        Bonjour à tous1,
+        Bonjour à tous,
         <br/>
         <br/>
         Dans le contexte actuel, les marchés étant suspendus, nous vous offrons un service de livraison à domicile.
