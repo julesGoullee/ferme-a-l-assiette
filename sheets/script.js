@@ -86,8 +86,9 @@ function AddOrder(request){
   const db = SpreadsheetApp.openById(config.SHEET_ID);
   const table = db.getSheetByName(config.TABLE.ORDERS);
   const rawOrder = JSON.parse(request.parameter.data);
+  rawOrder.id = Utilities.getUuid();
   const order = {
-    Id: Utilities.getUuid(),
+    Id: rawOrder.id,
     'Date de commande': (new Date() ).toISOString().split('T')[0],
     'Date de livraison': rawOrder.deliveryDate,
     Nom: rawOrder.name,
@@ -117,7 +118,7 @@ function getEmailProductLine(product){
 function testSendEmail(){
 
   const order = {
-    "id":"",
+    "id":"id1",
     "email":"julesgoullee@gmail.com",
     "name":"jules goullee",
     "phone":"+33632111276",
@@ -137,6 +138,7 @@ function sendEmailNewOrderUser(order){
     .createTemplateFromFile('mail-new-order-user').evaluate().getContent();
 
   const mailNewOrderUser = mailNewOrderUserTemplate
+    .split('{{ORDER_ID}}').join(order.id)
     .split('{{EMAIL}}').join(order.email)
     .split('{{NAME}}').join(order.name)
     .split('{{phone}}').join(order.phone)
