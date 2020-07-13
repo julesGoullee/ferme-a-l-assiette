@@ -10,6 +10,12 @@
 //
 // }
 
+declare global {
+
+  interface Window { instgrm: any; }
+
+}
+
 export enum Unit {
   KG = 'kg',
   PIECE = 'piece',

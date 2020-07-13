@@ -34,6 +34,16 @@
       }
     ]
 
+    mounted(){
+
+      this.$nextTick(function () {
+
+        window.instgrm.Embeds.process();
+
+      })
+
+    }
+
   }
 
 </script>

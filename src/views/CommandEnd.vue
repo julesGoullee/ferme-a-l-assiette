@@ -10,7 +10,7 @@
       <b-col>Nous vous avons envoyé un récapitulatif par email
       </b-col>
     </b-row>
-    <b-row align-h="center" align-v="center">
+    <b-row align-h="center">
       <InstagramGallery />
     </b-row>
   </b-container>
