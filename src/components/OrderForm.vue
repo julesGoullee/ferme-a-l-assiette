@@ -250,6 +250,7 @@
         title="Confirmation de commande"
         v-model="showConfirmation"
         scrollable
+        @ok="confirmOrder"
       >
         <b-container style="font-size: 13px;">
           <b-row>
@@ -420,8 +421,17 @@
 
       event.preventDefault()
       this.order.total = this.order.products.reduce( (acc: number, product: Product) => acc + ( (product.quantity || 1) * product.unitPrice), 0)
-      orderStore.addOrder(this.order)
       this.showConfirmation = true
+
+    }
+
+    public confirmOrder(event: any): void {
+
+      event.preventDefault()
+      this.showConfirmation = false
+      orderStore.addOrder(this.order).then( () => {
+        this.$router.push('/commandeTermine')
+      })
 
     }
 
