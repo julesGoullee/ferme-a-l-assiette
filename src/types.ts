@@ -1,3 +1,15 @@
+// export interface RootState {
+//   version: string;
+// }
+//
+// export interface OrderState {
+//
+// }
+//
+// export interface ProductsState {
+//
+// }
+
 export enum Unit {
   KG = 'kg',
   PIECE = 'piece',

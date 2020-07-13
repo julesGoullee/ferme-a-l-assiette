@@ -36,6 +36,9 @@ function doGet(req){
     case "addOrder":
       return AddOrder(req);
       break;
+    case "getOrder":
+      return GetOrder(req);
+      break;
     default:
       break;
   }
@@ -47,6 +50,35 @@ function GetProduct(request){
   const table = db.getSheetByName(config.TABLE.PRODUCTS);
   return Read(request, table);
 
+}
+
+function GetOrder(request){
+
+  const db = SpreadsheetApp.openById(config.SHEET_ID);
+  const table = db.getSheetByName(config.TABLE.ORDERS);
+  const id = request.parameter.id;
+
+  const order = _read(table, id);
+
+  if(!order || Array.isArray(order)){
+
+    throw new Error('order not found');
+
+  }
+
+  return response().json({
+    success: true,
+    data: order
+  });
+
+}
+
+function testRead(){
+
+  const id = 'a7d11b8a-bbc4-46e0-a2c1-4f258a76c1c1'
+  const db = SpreadsheetApp.openById(config.SHEET_ID);
+  const table = db.getSheetByName(config.TABLE.ORDERS);
+  const orders = _read(table, id);
 }
 
 function AddOrder(request){
@@ -152,7 +184,8 @@ function sendMail(template, email) {
  * @example-request-single-row | ?action=read&table=<TABLE_NAME>&id=<ROW_NUMBER>
  */
 function Read( request, table ) {
-  var request_id = Number( request.parameter.id );
+
+  var request_id = request.parameter.id;
 
   return response().json({
     success: true,
@@ -311,15 +344,7 @@ function _read( sheet, id ) {
 
   // Filter if id is provided
   if( id ) {
-    var filtered = result.filter( function( record ) {
-      if ( record.id === id ) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    return filtered.shift();
+    return result.find( function(record){ return record.Id === id});
   }
 
   return result;

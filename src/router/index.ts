@@ -14,10 +14,20 @@ Vue.use(VueRouter)
     component: Home
   },
   {
+    path: '/commande/:id',
+    name: 'OrderId',
+    component: Home
+  },
+  {
     path: '/commandeTermine',
     name: 'CommandEnd',
     component: CommandEnd
-  }
+  },
+  {
+    path: '*',
+    name: 'All',
+    component: Home
+  },
 ]
 
 Vue.use(BootstrapVue)
