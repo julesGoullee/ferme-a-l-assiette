@@ -206,7 +206,7 @@
                   <b-button
                     id="input-add-product-button"
                     type="submit"
-                    variant="outline-info"
+                    variant="info"
                     v-on:click="addProduct"
                     :disabled="orderAddProduct.id === '' || (!orderAddProduct.quantity || parseFloat(orderAddProduct.quantity) <= 0)"
                     squared
@@ -302,7 +302,7 @@
           <b-overlay :show="showConfirmationLoader" rounded="sm" class="w-100">
             <div class="w-100">
               <b-button
-                variant="danger"
+                variant="outline-info"
                 size="sm"
                 class="float-left w-40 btn-disable-on-focus"
                 style="width: 40%"

@@ -1,8 +1,8 @@
 module.exports = {
   transpileDependencies: ['vuex-persist'],
   pwa: {
-    // themeColor: "#664747",
-    // msTileColor: "#130f40",
+    themeColor: "#ece5dc",
+    msTileColor: "#ece5dc",
     name: "Ferme à l'assiette",
     manifestOptions: {
       "icons": [
