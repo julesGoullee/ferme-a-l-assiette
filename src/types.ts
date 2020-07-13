@@ -12,7 +12,9 @@
 
 declare global {
 
-  interface Window { instgrm: any; }
+  interface Window {
+    instgrm: any;
+  }
 
 }
 
