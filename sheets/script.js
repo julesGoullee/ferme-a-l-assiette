@@ -112,7 +112,7 @@ function sendEmailNewOrderUser(order){
     .split('{{ADDRESS.CITY}}').join(order.address.city)
     .split('{{ADDRESS.POSTAL_CODE}}').join(order.address.postalCode)
     .split('{{TOTAL}}').join(order.total.toFixed(2).replace('.', ',') )
-    .split('{{DELIVERY_DATE}}').join(new Date(order.deliveryDate).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) )
+    .split('{{DELIVERY_DATE}}').join(new Date(order.deliveryDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) )
     .split('{{ITEMS}}').join(order.products.reduce( (acc, product) => `${acc}${getEmailProductLine(product)}`, '') );
 
   return MailApp.sendEmail({
