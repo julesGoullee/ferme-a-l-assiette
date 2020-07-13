@@ -25,10 +25,8 @@ export default class OrderModule extends VuexModule {
   @MutationAction({ mutate: ['current']})
   async addOrder(newOrder: Order) {
 
-    const orderFormatted = Object.assign({}, newOrder) as Record<string, any>
-    orderFormatted.products = orderFormatted.products.reduce( (acc: string, product: Product) =>
-      `${acc}${product.group ? `${product.group} - ` : ''}${product.name}:${product.quantity};`, '')
-    const res = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=addOrder&data=${JSON.stringify(orderFormatted)}`)
+    console.info(JSON.stringify(newOrder))
+    const res = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=addOrder&data=${JSON.stringify(newOrder)}`)
     console.log(res)
     return { current: Object.assign({}, newOrder) }
   }

@@ -53,22 +53,92 @@ function AddOrder(request){
 
   const db = SpreadsheetApp.openById(config.SHEET_ID);
   const table = db.getSheetByName(config.TABLE.ORDERS);
-  const rawData = JSON.parse(request.parameter.data);
-  const data = {
+  const rawOrder = JSON.parse(request.parameter.data);
+  const order = {
     Id: Utilities.getUuid(),
     'Date de commande': (new Date() ).toISOString().split('T')[0],
-    'Date de livraison': rawData.deliveryDate,
-    Nom: rawData.name,
-    'E-mail': rawData.email,
-    Telephone: rawData.phone,
-    Rue: rawData.address.street,
-    Ville: rawData.address.city,
-    'Code postal': rawData.address.postalCode,
-    Produits: rawData.products
+    'Date de livraison': rawOrder.deliveryDate,
+    Nom: rawOrder.name,
+    'E-mail': rawOrder.email,
+    Telephone: rawOrder.phone,
+    Rue: rawOrder.address.street,
+    Ville: rawOrder.address.city,
+    'Code postal': rawOrder.address.postalCode,
+    Produits: rawOrder.products.reduce( (acc, product) =>
+      `${acc}${product.group ? `${product.group} - ` : ''}${product.name}:${product.quantity};`, '')
   };
 
-  return Insert(data, table);
+  sendEmailNewOrderUser(rawOrder);
 
+  return Insert(order, table);
+
+}
+
+function getEmailProductLine(product){
+  return `<tr>
+    <td align="left" width="50%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">${product.label}</td>
+    <td align="left" width="25%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">${product.quantity.toString().replace('.', ',')}</td>
+    <td align="left" width="25%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">${(product.quantity * product.unitPrice).toFixed(2).replace('.', ',')} €</td>
+  </tr>`;
+}
+
+function testSendEmail(){
+
+  const order = {
+    "id":"",
+    "email":"julesgoullee@gmail.com",
+    "name":"jules goullee",
+    "phone":"+33632111276",
+    "address":{"street":"7 chemin de castagney est","city":"sainte terre","postalCode":"33350"},
+    "products":[{"id":"49bab883-2efa-4abd-b252-6f547c0c547d","name":"Roti de porc confit","group":"","label":"Roti de porc confit (25.00€/kg)","unitPrice":25,"unit":"kg","quantity":1.2}],
+    "total":30,
+    "deliveryDate":"2020-07-24"
+  };
+
+  return sendEmailNewOrderUser(order);
+
+}
+
+function sendEmailNewOrderUser(order){
+
+  const mailNewOrderUserTemplate = HtmlService
+    .createTemplateFromFile('mail-new-order-user').evaluate().getContent();
+
+  const mailNewOrderUser = mailNewOrderUserTemplate
+    .split('{{EMAIL}}').join(order.email)
+    .split('{{NAME}}').join(order.name)
+    .split('{{phone}}').join(order.phone)
+    .split('{{ADDRESS.STREET}}').join(order.address.street)
+    .split('{{ADDRESS.CITY}}').join(order.address.city)
+    .split('{{ADDRESS.POSTAL_CODE}}').join(order.address.postalCode)
+    .split('{{TOTAL}}').join(order.total.toFixed(2).replace('.', ',') )
+    .split('{{DELIVERY_DATE}}').join(order.deliveryDate)
+    .split('{{ITEMS}}').join(order.products.reduce( (acc, product) => `${acc}${getEmailProductLine(product)}`, '') );
+
+  return MailApp.sendEmail({
+    to: order.email,
+    from: `Ferme a l'assiette`,
+    subject: "Confirmation de commande",
+    htmlBody: mailNewOrderUser
+  });
+
+}
+
+function sendNewOrderAdmin(){
+
+}
+
+function sendMail(template, email) {
+
+  var email = 'jules@amon.tech';
+
+  var message = templ.evaluate().getContent();
+
+  MailApp.sendEmail({
+    to: email,
+    subject: "Test",
+    htmlBody: message
+  });
 }
 
 /* Read
@@ -276,20 +346,4 @@ function prepareRow( object_to_sort, array_with_order ) {
   }
 
   return sorted_array;
-}
-
-function sendMail(template, email) {
-
-  var templ = HtmlService
-    .createTemplateFromFile('mail-client');
-
-  var email = 'jules@amon.tech';
-
-  var message = templ.evaluate().getContent();
-
-  MailApp.sendEmail({
-    to: email,
-    subject: "Test",
-    htmlBody: message
-  });
 }
