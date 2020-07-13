@@ -39,6 +39,9 @@ function doGet(req){
     case "getOrder":
       return GetOrder(req);
       break;
+    case "updateOrder":
+      return UpdateOrder(req);
+      break;
     default:
       break;
   }
@@ -104,6 +107,31 @@ function AddOrder(request){
   sendEmailNewOrderUser(rawOrder);
 
   return Insert(order, table);
+
+}
+
+function UpdateOrder(request){
+
+  const db = SpreadsheetApp.openById(config.SHEET_ID);
+  const table = db.getSheetByName(config.TABLE.ORDERS);
+  const rawOrder = JSON.parse(request.parameter.data);
+  const order = {
+    Id: rawOrder.id,
+    'Date de commande': (new Date() ).toISOString().split('T')[0],
+    'Date de livraison': rawOrder.deliveryDate,
+    Nom: rawOrder.name,
+    'E-mail': rawOrder.email,
+    Telephone: rawOrder.phone,
+    Rue: rawOrder.address.street,
+    Ville: rawOrder.address.city,
+    'Code postal': rawOrder.address.postalCode,
+    Produits: rawOrder.products.reduce( (acc, product) =>
+      `${acc}${product.group ? `${product.group} - ` : ''}${product.name}:${product.quantity};`, '')
+  };
+
+  sendEmailNewOrderUser(rawOrder);
+
+  return Update(rawOrder.id, order, table);
 
 }
 
@@ -260,14 +288,13 @@ function Insert( data, table ) {
  *
  * @example-request | ?action=update&table=<TABLE_NAME>&id=<ID>&data={"col_to_update": "value" }
  */
-function Update( request, table ) {
+function Update(id, data, table) {
   var last_col      = table.getLastColumn();
   var first_row     = table.getRange(1, 1, 1, last_col).getValues();
   var headers       = first_row.shift();
 
-  var request_id    = Number( request.parameter.id );
+  var request_id    = id;
   var current_data  = _read( table, request_id );
-  var data          = JSON.parse( request.parameter.data );
 
   var result = {};
 

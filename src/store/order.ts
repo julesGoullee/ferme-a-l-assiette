@@ -34,6 +34,15 @@ export default class OrderModule extends VuexModule {
     return { current: Object.assign({}, newOrder)}
   }
 
+  @MutationAction({ mutate: ['current']})
+  async updateOrder(newOrder: Order) {
+
+    const res = await axios.get(`${Config.SPREADSHEET_BASE_URL}action=updateOrder&data=${JSON.stringify(newOrder)}&id=${newOrder.id}`)
+    newOrder.id = res.data.data.Id
+    return { current: Object.assign({}, newOrder)}
+
+  }
+
 
   @MutationAction({ mutate: ['current', 'rawProducts', 'orderLoaded']})
   async fetchOrder(orderId: string) {

@@ -487,12 +487,25 @@
       event.preventDefault()
       this.showConfirmationLoader = true
 
-      orderStore.addOrder(this.order).then( () => {
+      if(orderStore.current.id){
 
-        this.showConfirmationLoader = false
-        this.$router.push('/commandeTermine')
+        orderStore.updateOrder(this.order).then( () => {
 
-      })
+          this.showConfirmationLoader = false
+          this.$router.push('/commandeTermine')
+
+        })
+
+      } else {
+
+        orderStore.addOrder(this.order).then( () => {
+
+          this.showConfirmationLoader = false
+          this.$router.push('/commandeTermine')
+
+        })
+
+      }
 
     }
 
