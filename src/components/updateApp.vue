@@ -1,7 +1,7 @@
 <template>
-  <b-container fluid>
-    <slot></slot>
-    <b-overlay :show="show" rounded="sm" no-wrap opacity="0.7">
+  <b-container>
+    <b-overlay :show="show" rounded="sm" opacity="0.7">
+      <slot></slot>
       <template v-slot:overlay>
         <div class="text-center">
           <p>Nouvelle version disponible</p>
@@ -25,7 +25,7 @@
   export default class UpdateApp extends Vue {
 
     registration: any = null
-    show = false
+    show = true
 
     created () {
 
