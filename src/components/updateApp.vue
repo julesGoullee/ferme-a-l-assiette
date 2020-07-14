@@ -25,7 +25,7 @@
   export default class UpdateApp extends Vue {
 
     registration: any = null
-    show = true
+    show = false
 
     created () {
 
