@@ -137,9 +137,9 @@ function UpdateOrder(request){
 
 function getEmailProductLine(product){
   return `<tr>
-    <td align="left" width="50%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">${product.label}</td>
-    <td align="left" width="25%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">${product.quantity.toString().replace('.', ',')}</td>
-    <td align="left" width="25%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">${(product.quantity * product.unitPrice).toFixed(2).replace('.', ',')} €</td>
+    <td align="left" width="50%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 20px;">${product.label}</td>
+    <td align="left" width="25%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 20px;">${product.quantity.toString().replace('.', ',')}</td>
+    <td align="left" width="25%" style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 13px; line-height: 20px;">${(product.quantity * product.unitPrice).toFixed(2).replace('.', ',')} €</td>
   </tr>`;
 }
 

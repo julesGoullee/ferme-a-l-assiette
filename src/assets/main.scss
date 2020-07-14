@@ -1,2 +1,10 @@
+$primary: #7a4464;
+$info: #447a70;
+//$secondary: #7a6a44;
+
 @import '~bootstrap';
 @import '~bootstrap-vue';
+
+body{
+   background-color: #f5f1ec;
+}
