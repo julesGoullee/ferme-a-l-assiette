@@ -8,3 +8,7 @@ $info: #447a70;
 body{
    background-color: #f5f1ec;
 }
+
+form input:-webkit-autofill {
+  background-color: #ffffff;
+}
