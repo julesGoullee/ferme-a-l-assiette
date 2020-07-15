@@ -32,7 +32,7 @@ npm run lint
 
 ### Generate assets 
 ```
-vue-asset-generate -a ./public/img/logo.png -o public/img/icons
+vue-asset-generate -a ./public/img/logo_transparent.png -o public/img/icons
 ```
 
 ### Customize configuration
