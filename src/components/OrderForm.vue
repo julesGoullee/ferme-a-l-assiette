@@ -303,7 +303,7 @@
             <b-overlay :show="showConfirmationLoader" rounded="sm" class="w-100">
               <div class="w-100">
                 <b-button
-                  variant="outline-info"
+                  variant="info"
                   size="sm"
                   class="float-left w-40 btn-disable-on-focus"
                   style="width: 40%"
