@@ -6,7 +6,7 @@
         <div class="text-center">
           <p>Nouvelle version disponible</p>
           <b-button
-            variant="info"
+            variant="primary"
             size="sm"
             @click="refreshApp"
           >
@@ -25,7 +25,7 @@
   export default class UpdateApp extends Vue {
 
     registration: any = null
-    show = false
+    show = true
 
     created () {
 
