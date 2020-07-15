@@ -6,7 +6,7 @@
       </b-col>
     </b-row>
     <b-row class="instagram-iframe" >
-      <b-col cols="12" sm="6" md="6" lg="4" xl="4" v-for="instagramPhoto in instagramPhotos" :key="instagramPhoto.id">
+      <b-col cols="12" sm="12" md="6" lg="5" xl="4" v-for="instagramPhoto in instagramPhotos" :key="instagramPhoto.id">
         <div v-html="instagramPhoto.code"></div>
       </b-col>
     </b-row>
