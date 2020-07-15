@@ -2,7 +2,6 @@ module.exports = {
   transpileDependencies: ['vuex-module-decorators', 'vuex-persist'],
   pwa: {
     themeColor: "#f5f1ec",
-    backgroundColor: "#f5f1ec",
     msTileColor: "#f5f1ec",
     name: "Ferme à l'assiette",
     appleMobileWebAppCapable: 'yes',
@@ -15,7 +14,8 @@ module.exports = {
     },
 
     manifestOptions: {
-      "icons": [
+      background_color: "#f5f1ec",
+      icons: [
         {
           "src": "./img/icons/android-chrome-192x192.png",
           "sizes": "192x192",
