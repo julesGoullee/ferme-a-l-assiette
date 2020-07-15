@@ -285,12 +285,12 @@
               <b-col cols="4" class="p-0">Date de livraison</b-col>
               <b-col cols="8">{{formatDelivery(order.deliveryDate)}}</b-col>
             </b-row>
-            <b-row>
+            <b-row class="row-confirm-products-table">
               <b-table
                 striped
                 :items="order.products"
                 :fields="modalFields"
-                class="mt-3 confirm-products-table"
+                class="mt-3 mb-0 confirm-products-table"
                 small
               >
                 <template v-slot:table-caption>
@@ -589,6 +589,13 @@
     }
   }
 
+  .row-confirm-products-table {
+
+    caption {
+      padding-bottom: 0;
+    }
+
+  }
   .btn-disable-on-focus:focus {
     outline: none!important;
     outline-width: 0!important;
