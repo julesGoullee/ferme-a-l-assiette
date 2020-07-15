@@ -251,7 +251,7 @@
         </b-form>
         <b-modal
           id="modal-confirm"
-          size="xl"
+          size="lg"
           title="Confirmation de commande"
           v-model="showConfirmation"
           scrollable
