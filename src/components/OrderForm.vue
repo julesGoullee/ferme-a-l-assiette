@@ -532,7 +532,7 @@
 
       event.preventDefault()
       const product = productsStore.products.find( product => product.id === this.orderAddProduct.id)
-      const quantity = this.orderAddProduct.quantity ? parseFloat(this.orderAddProduct.quantity.toString() ) : 0;
+      const quantity = this.orderAddProduct.quantity ? parseFloat(this.orderAddProduct.quantity.toString() ) : 0
 
       this.order.products.push(Object.assign({}, product, { quantity }) )
       this.orderAddProduct = {

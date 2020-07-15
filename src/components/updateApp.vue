@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator';
+  import {Component, Vue} from 'vue-property-decorator'
 
   @Component
   export default class UpdateApp extends Vue {
@@ -31,27 +31,24 @@
 
       document.addEventListener('swUpdated', (e: any) => {
 
-        console.log('swUpdated', e)
         this.show = true
         this.registration = e.detail
 
-      }, { once: true });
+      }, { once: true })
 
       navigator.serviceWorker.addEventListener('controllerchange', () => {
 
-        console.log('controllerchange')
-        window.location.reload();
+        window.location.reload()
 
-      });
+      })
 
     }
 
     refreshApp () {
 
-      console.log('refreshApp')
       if(this.registration && this.registration.waiting){
 
-        this.registration.waiting.postMessage('skipWaiting');
+        this.registration.waiting.postMessage('skipWaiting')
 
       }
 

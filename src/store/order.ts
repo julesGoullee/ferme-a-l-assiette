@@ -1,8 +1,9 @@
 import {Module, VuexModule, MutationAction, Mutation, Action} from 'vuex-module-decorators'
 import axios from 'axios'
+import moment from 'moment'
 import {Address, Order, Product} from '@/types'
 import store from '@/store'
-import Config from "@/config";
+import Config from "@/config"
 
 @Module({ name: 'order', stateFactory: true, store })
 export default class OrderModule extends VuexModule {
@@ -61,7 +62,7 @@ export default class OrderModule extends VuexModule {
       phone: res.data.data.Telephone,
       total: 0,
       address: address,
-      deliveryDate: res.data.data['Date de livraison'],
+      deliveryDate: moment(res.data.data['Date de livraison']).format('YYYY-MM-DD'),
       products: []
     }
 
@@ -85,8 +86,6 @@ export default class OrderModule extends VuexModule {
         const [rawLabel, quantity] = partialProduct.split(':')
         const product = this.context.rootState.products.products.find( (product: Product) => `${product.group ? `${product.group} - ` : ''}${product.name}` === rawLabel)
 
-        console.log(partialProduct)
-        console.log(product)
         if(product){
 
           product.quantity = parseFloat(quantity)
