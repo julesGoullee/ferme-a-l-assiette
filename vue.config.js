@@ -2,6 +2,7 @@ module.exports = {
   transpileDependencies: ['vuex-module-decorators', 'vuex-persist'],
   pwa: {
     themeColor: "#f5f1ec",
+    backgroundColor: "#f5f1ec",
     msTileColor: "#f5f1ec",
     name: "Ferme à l'assiette",
     appleMobileWebAppCapable: 'yes',
