@@ -1,5 +1,7 @@
 # ferme-a-l-assiette
 
+[Demo](https://ferme-a-l-assiette.netlify.app)
+
 ## Project setup
 ```
 npm install
