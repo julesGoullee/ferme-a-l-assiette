@@ -294,7 +294,7 @@
                 small
               >
                 <template v-slot:table-caption>
-                  <div style="text-align: center">Votre total est estimé a {{order.total.toFixed(2)}} €</div>
+                  <div style="text-align: center; font-size: 15px" >Votre total est estimé a {{order.total.toFixed(2)}} €</div>
                 </template>
               </b-table>
             </b-row>
