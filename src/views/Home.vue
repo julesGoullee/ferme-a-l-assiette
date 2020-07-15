@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="home">
     <b-row align-h="center" class="mb-2">
-      <b-col cols="12" class="text-center">
+      <b-col cols="12" class="text-center mt-3">
         <b-img-lazy
           src="/img/logo.png"
           alt="logo"
