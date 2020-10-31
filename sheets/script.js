@@ -194,7 +194,7 @@ function sendEmailOrderUser(order, isNew){
 
   config.ADMIN_EMAILS.forEach( (adminEmail) => MailApp.sendEmail({
     to: adminEmail,
-    subject: isNew ? "[ADMIN]Confirmation de commande" : '[ADMIN]Mise à jour de commande',
+    subject: isNew ? "[ADMIN] Confirmation de commande" : '[ADMIN] Mise à jour de commande',
     htmlBody: mailAdminNewOrderUser
   }) );
 
