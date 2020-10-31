@@ -190,6 +190,7 @@
                       placeholder="1.2"
                       autocomplete="off"
                       size="sm"
+                      ref="inputOrderSelectProductQuantity"
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
@@ -525,6 +526,11 @@
     public onSelectProduct(product: Product) {
 
       this.orderAddProduct = Object.assign({}, product, { quantity: this.orderAddProduct.quantity })
+
+      setTimeout( () => {
+        const ref: any = this.$refs['inputOrderSelectProductQuantity']
+        ref.$el.focus()
+      }, 10)
 
     }
 
