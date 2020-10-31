@@ -1,5 +1,6 @@
 const config = {
   SHEET_ID: "1JUmwo8nhqq7irBXXSkFgmxeeFq4DkcaH-Bc5AVhjJtA",
+  ADMIN_EMAILS: ['julesgoullee@gmail.com', 'fermealassiette@gmail.com'],
   TABLE: {
     PRODUCTS: 'Produits',
     ORDERS: 'Commandes'
@@ -169,13 +170,33 @@ function sendEmailOrderUser(order, isNew){
     .split('{{ORDER_ID}}').join(order.id)
     .split('{{EMAIL}}').join(order.email)
     .split('{{NAME}}').join(order.name)
-    .split('{{phone}}').join(order.phone)
+    .split('{{PHONE}}').join(order.phone)
     .split('{{ADDRESS.STREET}}').join(order.address.street)
     .split('{{ADDRESS.CITY}}').join(order.address.city)
     .split('{{ADDRESS.POSTAL_CODE}}').join(order.address.postalCode)
     .split('{{TOTAL}}').join(order.total.toFixed(2).replace('.', ',') )
     .split('{{DELIVERY_DATE}}').join(new Date(order.deliveryDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) )
     .split('{{ITEMS}}').join(order.products.reduce( (acc, product) => `${acc}${getEmailProductLine(product)}`, '') );
+
+  const mailAdminNewOrderUserTemplate = HtmlService
+    .createTemplateFromFile('mail-admin-new-order-user').evaluate().getContent();
+  const mailAdminNewOrderUser = mailAdminNewOrderUserTemplate
+    .split('{{ORDER_ID}}').join(order.id)
+    .split('{{EMAIL}}').join(order.email)
+    .split('{{NAME}}').join(order.name)
+    .split('{{PHONE}}').join(order.phone)
+    .split('{{ADDRESS.STREET}}').join(order.address.street)
+    .split('{{ADDRESS.CITY}}').join(order.address.city)
+    .split('{{ADDRESS.POSTAL_CODE}}').join(order.address.postalCode)
+    .split('{{TOTAL}}').join(order.total.toFixed(2).replace('.', ',') )
+    .split('{{DELIVERY_DATE}}').join(new Date(order.deliveryDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) )
+    .split('{{ITEMS}}').join(order.products.reduce( (acc, product) => `${acc}${getEmailProductLine(product)}`, '') );
+
+  config.ADMIN_EMAILS.forEach( (adminEmail) => MailApp.sendEmail({
+    to: adminEmail,
+    subject: isNew ? "[ADMIN]Confirmation de commande" : '[ADMIN]Mise à jour de commande',
+    htmlBody: mailAdminNewOrderUser
+  }) );
 
   return MailApp.sendEmail({
     to: order.email,
