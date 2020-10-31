@@ -24,6 +24,7 @@ export enum Unit {
   KG = 'kg',
   PIECE = 'piece',
   TRANCHE = 'tranche',
+  PORTION = 'portion',
 }
 
 export interface Product {

@@ -14,7 +14,7 @@
         Bonjour à tous,
         <br/>
         <br/>
-        Dans le contexte actuel, les marchés étant suspendus, nous vous offrons un service de livraison à domicile.
+        Dans le contexte actuel de re-confinement, nous vous offrons un service de livraison à domicile.
         Soucieux de la qualité de nos produits, nous vous garantissons l'origine "Producteurs Locaux".
         <br>
         Nos produits sont vendus au kilo ou à la pièce, le prix varie selon le poids de l’animal.

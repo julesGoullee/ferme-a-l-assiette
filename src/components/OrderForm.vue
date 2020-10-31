@@ -104,7 +104,7 @@
                   <b-container fluid>
                     <b-row>
                       <b-col style="font-size: 13px;padding: 0" class="mb-1 mt-0">
-                        {{product.group}} - {{product.name}}
+                        {{product.group}}{{product.group ? ' - ' : ''}}{{product.name}}
                       </b-col>
                     </b-row>
                     <b-row align-v="center">
