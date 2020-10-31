@@ -66,8 +66,7 @@
           <b-container fluid class="mb-2 mt-3">
             <b-row>
               <b-col cols="8" style="padding-left: 0">
-                <b-form-group id="input-group-order-address-city" label-for="input-order-address-city">
-                  <label class="sr-only">Ville</label>
+                <b-form-group id="input-group-order-address-city" label-class="sr-only" label="Ville" label-for="input-order-address-city">
                   <b-form-input
                     id="input-order-address-city"
                     v-model="order.address.city"
@@ -78,8 +77,7 @@
                 </b-form-group>
               </b-col>
               <b-col cols="4" style="padding: 0">
-                <b-form-group id="input-group-order-address-postal-code" label-for="input-order-address-postal-code">
-                  <label class="sr-only">Code postal</label>
+                <b-form-group id="input-group-order-address-postal-code" label-class="sr-only" label="Code postal" label-for="input-order-address-postal-code">
                   <b-form-input
                     id="input-order-address-postal-code"
                     v-model="order.address.postalCode"
@@ -179,8 +177,7 @@
               </b-row>
               <b-row>
                 <b-col cols="3" class="p-0">
-                  <b-form-group id="input-group-order-add-product-quantity" label-for="input-order-add-product-quantity" class="mb-0">
-                    <label class="sr-only">Quantité</label>
+                  <b-form-group id="input-group-order-add-product-quantity" label-class="sr-only" label="Quantité" label-for="input-order-add-product-quantity" class="mb-0">
                     <b-form-input
                       id="input-order-select-product-quantity"
                       v-model="orderAddProduct.quantity"
@@ -225,7 +222,6 @@
           </b-container>
 
           <b-form-group id="input-group-order-delivery-date" label-for="input-order-delivery-date">
-            <label class="sr-only">Date de livraison</label>
             <b-form-datepicker
               id="input-order-delivery-date"
               v-model="order.deliveryDate"
