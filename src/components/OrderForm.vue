@@ -177,7 +177,7 @@
               </b-row>
               <b-row>
                 <b-col cols="3" class="p-0">
-                  <b-form-group id="input-group-order-add-product-quantity" label-class="sr-only" label="Quantité" label-for="input-order-add-product-quantity" class="mb-0">
+                  <b-form-group id="input-group-order-add-product-quantity" label-class="sr-only" label="Quantité" label-for="input-order-select-product-quantity" class="mb-0">
                     <b-form-input
                       id="input-order-select-product-quantity"
                       v-model="orderAddProduct.quantity"
